@@ -63,8 +63,8 @@ git push -u origin main
 ## 배포 전 꼭 교체할 값
 
 - `landing/index.html`의 `https://example.netlify.app/`
-- `landing/index.html`의 `contact@your-domain.com`
-- `landing/privacy.html`의 `contact@your-domain.com`
+- `landing/index.html`의 운영 이메일
+- `landing/privacy.html`의 운영 이메일
 
 ## 선택 사항
 
