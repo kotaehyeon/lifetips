@@ -1,0 +1,27 @@
+{
+  "name": "kotaehyeon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev:landing": "python3 -m http.server 3000 --directory landing",
+    "playwright": "./scripts/run-playwright.sh",
+    "test": "./scripts/run-playwright.sh test",
+    "test:landing": "./scripts/test-landing.sh",
+    "test:extension": "node --test chrome-extension/lib/*.test.js",
+    "test:e2e": "./scripts/run-playwright.sh test",
+    "test:e2e:headed": "./scripts/run-playwright.sh test --headed",
+    "deploy:netlify": "./scripts/deploy-netlify.sh prod",
+    "deploy:netlify:preview": "./scripts/deploy-netlify.sh preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.59.0"
+  }
+}

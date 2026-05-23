@@ -1,0 +1,92 @@
+name: Landing CI and Netlify Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "landing/**"
+      - "tests/landing.spec.ts"
+      - "scripts/run-playwright.sh"
+      - "scripts/test-landing.sh"
+      - "scripts/deploy-netlify.sh"
+      - "package.json"
+      - "package-lock.json"
+      - "playwright.config.ts"
+      - "netlify.toml"
+      - ".github/workflows/landing-ci-netlify.yml"
+  pull_request:
+    paths:
+      - "landing/**"
+      - "tests/landing.spec.ts"
+      - "scripts/run-playwright.sh"
+      - "scripts/test-landing.sh"
+      - "scripts/deploy-netlify.sh"
+      - "package.json"
+      - "package-lock.json"
+      - "playwright.config.ts"
+      - "netlify.toml"
+      - ".github/workflows/landing-ci-netlify.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: landing-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run landing test
+        run: npm run test:landing
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check Netlify secrets
+        id: secrets
+        run: |
+          if [[ -n "${{ secrets.NETLIFY_AUTH_TOKEN }}" && -n "${{ secrets.NETLIFY_SITE_ID }}" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip deployment when secrets are missing
+        if: steps.secrets.outputs.enabled != 'true'
+        run: echo "NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID is not configured. Skipping deployment."
+
+      - name: Set up Node.js
+        if: steps.secrets.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy landing to Netlify
+        if: steps.secrets.outputs.enabled == 'true'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: ./scripts/deploy-netlify.sh prod
