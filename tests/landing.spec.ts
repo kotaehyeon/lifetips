@@ -52,6 +52,31 @@ test.describe("senior benefits landing", () => {
     await expect(page.getByRole("link", { name: /복지로 기초연금 상세/i })).toBeVisible();
   });
 
+  test("shows interactive tools inside a detail page", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/pages/basic-pension.html");
+
+    await expect(
+      page.getByRole("heading", { name: /내 상황 간단 체크/i }),
+    ).toBeVisible();
+
+    await page.getByLabel(/나이나 상황상 기초연금 대상일 가능성이 있습니다/i).check();
+    await page.getByRole("button", { name: /체크 결과 보기/i }).click();
+
+    await expect(
+      page.getByRole("heading", { name: /기초연금 확인 방향을 정리했어요/i }),
+    ).toBeVisible();
+
+    await page.getByRole("button", { name: "도움됐어요" }).click();
+    await expect(page.getByText(/기초연금 페이지가 도움이 되었다고 표시했어요./i)).toBeVisible();
+
+    await page.getByLabel("메모").fill("주민센터 방문 전에 준비 서류부터 다시 확인할 예정입니다.");
+    await page.getByRole("button", { name: /메모 저장하기/i }).click();
+
+    await expect(page.getByText(/기초연금 관련 메모가 저장되었습니다./i)).toBeVisible();
+    await expect(page.getByText(/주민센터 방문 전에 준비 서류부터 다시 확인할 예정입니다./i)).toBeVisible();
+  });
+
   test("shows recommendations after the self-check form is submitted", async ({
     page,
   }) => {

@@ -114,7 +114,9 @@ a {
 
 .checker-form,
 .poll-form,
-.board-form {
+.board-form,
+.detail-check-form,
+.detail-note-form {
   display: grid;
   gap: 12px;
 }
@@ -555,6 +557,56 @@ a {
   color: var(--muted);
   line-height: 1.6;
   text-align: center;
+}
+
+.detail-tools {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-tools .section-title {
+  margin-bottom: 0;
+}
+
+.detail-engagement-box {
+  border: 1px solid rgba(123, 92, 240, 0.12);
+}
+
+.reaction-row {
+  display: flex;
+  gap: 10px;
+}
+
+.reaction-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(123, 92, 240, 0.18);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Noto Sans KR", sans-serif;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.reaction-btn.is-active {
+  background: rgba(123, 92, 240, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.reaction-feedback {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #235887;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .topbar {
