@@ -29,10 +29,10 @@ test.describe("senior benefits landing", () => {
     await expect(page.getByRole("link", { name: "개인정보처리방침" })).toBeVisible();
     await expect(page.getByRole("link", { name: "정보 출처 보기" })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /내 상황으로 혜택 추천받기/i }),
+      page.getByRole("heading", { name: /내게 맞는 혜택 간단 체크/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /혜택 경험 공유 게시판/i }),
+      page.getByRole("heading", { name: /혜택 경험 나누기/i }),
     ).toBeVisible();
   });
 
